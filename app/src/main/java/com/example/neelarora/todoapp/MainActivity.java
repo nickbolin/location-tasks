@@ -127,4 +127,38 @@ public class MainActivity extends AppCompatActivity {
         db.close();
         updateUI();
     }
+
+    public void editTask(View view) {
+        View parent = (View) view.getParent();
+        TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
+        String oldTask = String.valueOf(taskTextView.getText());
+        Log.d(TAG, "Update task");
+        //final String[] upTask = new String[1];
+        final EditText taskEditText = new EditText(this);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Update task")
+                .setMessage("What do you want to change?")
+                .setView(taskEditText)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newTask = String.valueOf(taskEditText.getText());
+                        //upTask[0] = newTask;
+                        SQLiteDatabase db = mHelper.getWritableDatabase();
+                        ContentValues vals = new ContentValues();
+                        vals.put(TaskContract.TaskEntry.COL_TASK_TITLE, newTask);
+                        String selection = TaskContract.TaskEntry.COL_TASK_TITLE + " = ? ";
+                        //String[] selectArgs = { newTask };
+                        db.update(TaskContract.TaskEntry.TABLE,
+                                vals,
+                                selection,
+                                new String[]{newTask});
+                        db.close();
+                        updateUI();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .create();
+        dialog.show();
+    }
 }

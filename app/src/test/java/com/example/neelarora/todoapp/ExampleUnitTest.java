@@ -1,5 +1,7 @@
 package com.example.neelarora.todoapp;
 
+import android.view.MenuItem;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,5 +15,11 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void test_editTask() throws Exception {
+        MainActivity main = new MainActivity();
+        main.onOptionsItemSelected(MenuItem.class.newInstance().setChecked(true));
     }
 }

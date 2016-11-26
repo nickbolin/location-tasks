@@ -20,5 +20,15 @@
         android:layout_alignParentRight="true"
         android:text="Done" />
 
+    <Button
+        android:onClick="editTask"
+        android:id="@+id/task_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="11dp"
+        android:layout_toStartOf="@+id/task_delete"
+        android:text="Edit" />
+
 
 </RelativeLayout>
