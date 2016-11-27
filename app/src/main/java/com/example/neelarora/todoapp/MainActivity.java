@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     public void editTask(View view) {
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
-        String oldTask = String.valueOf(taskTextView.getText());
+        final String oldTask = String.valueOf(taskTextView.getText());
         Log.d(TAG, "Update task");
         //final String[] upTask = new String[1];
         final EditText taskEditText = new EditText(this);
@@ -147,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
                         SQLiteDatabase db = mHelper.getWritableDatabase();
                         ContentValues vals = new ContentValues();
                         vals.put(TaskContract.TaskEntry.COL_TASK_TITLE, newTask);
-                        String selection = TaskContract.TaskEntry.COL_TASK_TITLE + " = ? ";
+                        String selection = TaskContract.TaskEntry.COL_TASK_TITLE + "=?";
                         //String[] selectArgs = { newTask };
                         db.update(TaskContract.TaskEntry.TABLE,
                                 vals,
                                 selection,
-                                new String[]{newTask});
+                                new String[]{oldTask});
                         db.close();
                         updateUI();
                     }
@@ -160,5 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .create();
         dialog.show();
+
+
     }
 }
