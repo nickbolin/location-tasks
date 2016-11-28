@@ -6,6 +6,10 @@ import com.google.android.gms.location.Geofence;
 
 import java.util.UUID;
 
+/**
+ * Geofence model, used for andriod specific code
+ */
+
 public class NamedGeofence implements Comparable {
 
   // region Properties

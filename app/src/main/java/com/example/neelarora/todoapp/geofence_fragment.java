@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
+ * This Geofence fragment is used for creating a geofence on a task. VC for add_geofence.xml
+ *
+ * Differs from the class diagram for android specific code around geofences
+ *
  * Created by neelarora on 11/26/16.
  */
 

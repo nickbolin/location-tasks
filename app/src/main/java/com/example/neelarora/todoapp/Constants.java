@@ -1,5 +1,11 @@
 package com.example.neelarora.todoapp;
 
+/**
+ * Constants used for the geofencing
+ *
+ * This differs from the class diagram for specific android code
+ */
+
 public class Constants {
 
   public static class Geometry {

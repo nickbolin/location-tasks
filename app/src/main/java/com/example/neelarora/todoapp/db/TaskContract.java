@@ -3,7 +3,7 @@ package com.example.neelarora.todoapp.db;
 import android.provider.BaseColumns;
 
 /**
- * holds the DB code for task creation
+ * holds the DB code for task creation, TASKMODEL @CLASSDIAGRAM
  * Created by neelarora on 11/16/16.
  */
 

@@ -1,4 +1,10 @@
 package com.example.neelarora.todoapp;
+/**
+ * This class is used to create an intent service to send a notification to the user when the
+ * user enters/dwells in a geofence that is set by them.
+ *
+ * This is different from the class diagram for andriod specific code.
+ */
 
 import android.app.IntentService;
 import android.app.Notification;

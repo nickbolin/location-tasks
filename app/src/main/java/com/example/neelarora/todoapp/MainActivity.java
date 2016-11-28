@@ -28,13 +28,21 @@ import com.example.neelarora.todoapp.db.TaskDBHelper;
 
 import java.util.ArrayList;
 
+/**
+ * View controller for the activity_main.xml VIEWTASK @CLASSDIAGRAM
+ */
+
 public class MainActivity extends AppCompatActivity implements geofence_fragment.AddGeofenceFragmentListener {
 
     private static final String TAG = "MainActivity";
-    private TaskDBHelper mHelper;
-    private ListView mTaskListView;
+    private TaskDBHelper mHelper; //INTERNAL DB
+    private ListView mTaskListView; //LIST OF TASK @CLASSDIAGRAM
     private ArrayAdapter<String> mAdapter;
 
+    /**
+     * Oncreate init - android code
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +83,14 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         return super.onCreateOptionsMenu(menu);
     }
 
+    //----------------------------------------------------------------------------------------
+    // FEATURES 1-4
     @Override
+    /**
+     * Create a new task, ADD TASK TO LIST - FEATURE
+     *
+     * @CLASSDIAGRAM
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_task:
@@ -110,33 +125,12 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         }
     }
 
-    private void updateUI() {
-        ArrayList<String> taskList = new ArrayList<>();
-        SQLiteDatabase db = mHelper.getReadableDatabase();
-        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
-                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
-                null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
-            taskList.add(cursor.getString(idx));
-        }
 
-        if (mAdapter == null) {
-            mAdapter = new ArrayAdapter<>(this,
-                    R.layout.todo_item,
-                    R.id.task_title,
-                    taskList);
-            mTaskListView.setAdapter(mAdapter);
-        } else {
-            mAdapter.clear();
-            mAdapter.addAll(taskList);
-            mAdapter.notifyDataSetChanged();
-        }
 
-        cursor.close();
-        db.close();
-    }
-
+    /**
+     * Delete task - FEATURE
+     * @param view
+     */
     public void deleteTask(View view) {
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
@@ -149,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         updateUI();
     }
 
+    /**
+     * Edit the task FEATURE
+     * @param view
+     */
     public void editTask(View view) {
         View parent = (View) view.getParent();
         TextView taskTextView = (TextView) parent.findViewById(R.id.task_title);
@@ -183,6 +181,10 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         dialog.show();
     }
 
+    /**
+     * Add_geofence to the view, user adds geofence - FEATURE
+     * @param view
+     */
     public void geoTag(View view)
     {
         geofence_fragment gf = new geofence_fragment();
@@ -190,6 +192,41 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         gf.show(getSupportFragmentManager(), "Geofence");
     }
 
+    //---------------------------------------------------------------------------------------
+
+    /**
+     * UPDATE UI and list item
+     */
+    private void updateUI() {
+        ArrayList<String> taskList = new ArrayList<>();
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        Cursor cursor = db.query(TaskContract.TaskEntry.TABLE,
+                new String[]{TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COL_TASK_TITLE},
+                null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            int idx = cursor.getColumnIndex(TaskContract.TaskEntry.COL_TASK_TITLE);
+            taskList.add(cursor.getString(idx));
+        }
+
+        if (mAdapter == null) {
+            mAdapter = new ArrayAdapter<>(this,
+                    R.layout.todo_item,
+                    R.id.task_title,
+                    taskList);
+            mTaskListView.setAdapter(mAdapter);
+        } else {
+            mAdapter.clear();
+            mAdapter.addAll(taskList);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    /**
+     * Listeners for geofence
+     */
     private GeofenceController.GeofenceControllerListener geofenceControllerListener = new GeofenceController.GeofenceControllerListener() {
         @Override
         public void onGeofencesUpdated() {
@@ -211,6 +248,11 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
         Toast.makeText(this, this.getString(R.string.Toast_Error), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * On adding the geofence
+     * @param dialog
+     * @param geofence
+     */
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, NamedGeofence geofence) {
         GeofenceController.getInstance().addGeofence(geofence, geofenceControllerListener);
@@ -218,6 +260,6 @@ public class MainActivity extends AppCompatActivity implements geofence_fragment
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-
+        //do nothing
     }
 }

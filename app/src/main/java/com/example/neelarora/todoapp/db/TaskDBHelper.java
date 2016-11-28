@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
+ * Creates DB for persistent storage
+ *
+ * Differs from class digragm for andriod specific code.
  * Created by neelarora on 11/16/16.
  */
 

@@ -25,6 +25,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for geofence creation.
+ *
+ * Differs from class diagram for geofence coding.
+ */
+
 public class GeofenceController {
 
   // region Properties
