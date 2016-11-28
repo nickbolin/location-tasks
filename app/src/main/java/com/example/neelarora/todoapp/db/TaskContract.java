@@ -15,5 +15,8 @@ public class TaskContract {
         public static final String TABLE = "tasks";
 
         public static final String COL_TASK_TITLE = "title";
+        public static final String COL_TASK_GEOTAG = "geotag";
+        public static final String COL_TASK_LAT = "lat";
+        public static final String COL_TASL_LONG = "long";
     }
 }

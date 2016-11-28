@@ -1,10 +1,15 @@
 package com.example.neelarora.todoapp;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,16 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.neelarora.todoapp.db.TaskContract;
 import com.example.neelarora.todoapp.db.TaskDBHelper;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements geofence_fragment.AddGeofenceFragmentListener {
 
     private static final String TAG = "MainActivity";
     private TaskDBHelper mHelper;
@@ -46,6 +53,20 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         db.close();
         updateUI();
+        GeofenceController.getInstance().init(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
     }
 
     @Override
@@ -160,7 +181,43 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .create();
         dialog.show();
+    }
 
+    public void geoTag(View view)
+    {
+        geofence_fragment gf = new geofence_fragment();
+        gf.setListener(this);
+        gf.show(getSupportFragmentManager(), "Geofence");
+    }
+
+    private GeofenceController.GeofenceControllerListener geofenceControllerListener = new GeofenceController.GeofenceControllerListener() {
+        @Override
+        public void onGeofencesUpdated() {
+            refresh();
+        }
+
+        @Override
+        public void onError() {
+            showErrorToast();
+        }
+    };
+    private void refresh() {
+        Button button = (Button) findViewById(R.id.task_geotag);
+        button.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
+
+    }
+
+    private void showErrorToast() {
+        Toast.makeText(this, this.getString(R.string.Toast_Error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, NamedGeofence geofence) {
+        GeofenceController.getInstance().addGeofence(geofence, geofenceControllerListener);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
 
     }
 }
